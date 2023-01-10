@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "google-maps-react": "^2.0.6",
+    "moment": "^2.29.4",
+    "react-grid-gallery": "^1.0.0",
+    "react-moment": "^1.1.2",
+    "universal-cookie": "^4.0.4"
+  }
+}

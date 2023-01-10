@@ -1,0 +1,6 @@
+However, let's simplify it so all recurring classes have an end recursion (no indefinitely-recurring anynmore).
+This way, you can create an instance for each occurrence.
+- So..., do we just set end recursion ourselves or should this be a user input?
+
+TODO: change all HttpResponses to Response
+

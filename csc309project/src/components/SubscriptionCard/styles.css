@@ -1,0 +1,11 @@
+.subCard {
+    background-color: lightgreen;
+    border-color: black;
+    transition: background-color 0.5s;
+}
+
+.subCard:hover {
+    /* padding-left: 10em; */
+    background-color: darkgoldenrod;
+    box-shadow: 1em;
+}

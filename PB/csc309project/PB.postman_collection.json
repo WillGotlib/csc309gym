@@ -1,0 +1,1118 @@
+{
+	"info": {
+		"_postman_id": "f5ae9a7d-34fa-4fb3-b1e8-f5e1d3ac7cbe",
+		"name": "CSC309 Project Backend Tests",
+		"description": "Run these in order for the best effect.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "23898056"
+	},
+	"item": [
+		{
+			"name": "Account – Setup",
+			"item": [
+				{
+					"name": "Register a user",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "username",
+									"value": "testUser",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "test@mail.com",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "Test123!",
+									"type": "text"
+								},
+								{
+									"key": "password2",
+									"value": "Test123!",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/accounts/register/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"accounts",
+								"register",
+								""
+							]
+						},
+						"description": "Creates a new user in the database. We will add other, non-essential fields to this profile later."
+					},
+					"response": []
+				},
+				{
+					"name": "User logout",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.collectionVariables.set('token', '')"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:8000/accounts/logout/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"accounts",
+								"logout",
+								""
+							]
+						},
+						"description": "Put this before login just to show that logging out when not logged in returns an appropriate message."
+					},
+					"response": []
+				},
+				{
+					"name": "Log in as the new user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"console.log(postman.getResponseCookie('CSRFToken'));",
+									"pm.collectionVariables.set(\"csrf-token\", postman.getResponseCookie('CSRFToken').value);",
+									"// X-CSRFToken"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-CSRFToken",
+								"value": "{{csrf-token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "username",
+									"value": "testUser",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "Test123!",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/accounts/login/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"accounts",
+								"login",
+								""
+							]
+						},
+						"description": "Body formdata contains username and password of the user we just registered."
+					},
+					"response": []
+				},
+				{
+					"name": "Look at current user's profile",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:8000/accounts/profile/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"accounts",
+								"profile",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add to current user's profile",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "X-CSRFToken",
+								"value": "{{csrf-token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "first_name",
+									"value": "Jean",
+									"type": "text"
+								},
+								{
+									"key": "last_name",
+									"value": "Valjean",
+									"type": "text"
+								},
+								{
+									"key": "phoneNumber",
+									"value": "416-583-0123",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/accounts/profile/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"accounts",
+								"profile",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Accounts – Subscriptions",
+			"item": [
+				{
+					"name": "Look at available subscriptions",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "username",
+									"value": "testUser",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "Test123!",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/accounts/subscriptions/all/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"accounts",
+								"subscriptions",
+								"all",
+								""
+							]
+						},
+						"description": "Body formdata contains username and password of the user we just registered."
+					},
+					"response": []
+				},
+				{
+					"name": "Subscribe to a subscription",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-CSRFToken",
+								"value": "{{csrf-token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://127.0.0.1:8000/accounts/subscriptions/1/subscribe/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"accounts",
+								"subscriptions",
+								"1",
+								"subscribe",
+								""
+							]
+						},
+						"description": "Body formdata contains username and password of the user we just registered."
+					},
+					"response": []
+				},
+				{
+					"name": "Add a credit card!",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "X-CSRFToken",
+								"value": "{{csrf-token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "creditCardNumber",
+									"value": "452020909310",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/accounts/profile/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"accounts",
+								"profile",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "View all this user's payments",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-CSRFToken",
+								"value": "{{csrf-token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "username",
+									"value": "testUser",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "Test123!",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/accounts/payments/history",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"accounts",
+								"payments",
+								"history"
+							]
+						},
+						"description": "Body formdata contains username and password of the user we just registered."
+					},
+					"response": []
+				},
+				{
+					"name": "View payment forecast",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-CSRFToken",
+								"value": "{{csrf-token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "username",
+									"value": "testUser",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "Test123!",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/accounts/payments/future",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"accounts",
+								"payments",
+								"future"
+							]
+						},
+						"description": "Data on the subscription the user has – can inform the user how much they're going to pay next time and (combined with the info they can get from the payment history request) when that will be."
+					},
+					"response": []
+				},
+				{
+					"name": "Change subscription",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-CSRFToken",
+								"value": "{{csrf-token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://127.0.0.1:8000/accounts/subscriptions/2/subscribe/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"accounts",
+								"subscriptions",
+								"2",
+								"subscribe",
+								""
+							]
+						},
+						"description": "Body formdata contains username and password of the user we just registered."
+					},
+					"response": []
+				},
+				{
+					"name": "Cancel subscription",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-CSRFToken",
+								"value": "{{csrf-token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://127.0.0.1:8000/accounts/subscriptions/unsubscribe/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"accounts",
+								"subscriptions",
+								"unsubscribe",
+								""
+							]
+						},
+						"description": "Body formdata contains username and password of the user we just registered."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Studios – Basic Lists",
+			"item": [
+				{
+					"name": "Studio Listing (Unfiltered)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:8000/studios/list/?lat=0&lng=0",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"studios",
+								"list",
+								""
+							],
+							"query": [
+								{
+									"key": "lat",
+									"value": "0"
+								},
+								{
+									"key": "lng",
+									"value": "0"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Studio Filtering (Name)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:8000/studios/list/?lat=0&lng=0&name=Big",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"studios",
+								"list",
+								""
+							],
+							"query": [
+								{
+									"key": "lat",
+									"value": "0"
+								},
+								{
+									"key": "lng",
+									"value": "0"
+								},
+								{
+									"key": "name",
+									"value": "Big"
+								}
+							]
+						},
+						"description": "Filter to show only Studios with a partial string match on their names."
+					},
+					"response": []
+				},
+				{
+					"name": "Studio Filtering (Coach)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:8000/studios/list/?lat=0&lng=0&coach=John",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"studios",
+								"list",
+								""
+							],
+							"query": [
+								{
+									"key": "lat",
+									"value": "0"
+								},
+								{
+									"key": "lng",
+									"value": "0"
+								},
+								{
+									"key": "coach",
+									"value": "John"
+								}
+							]
+						},
+						"description": "Filter to show only Studios which host classes taught by a certain coach – in the database we have uploaded, \"John Cena\" coaches the classes \"Introduction to Kickboxing\" and \"Extreme Mountain Biking\". We put a string (here, \"John\", so not the full name) into the url parameters, and it looks for partial matches."
+					},
+					"response": []
+				},
+				{
+					"name": "Studio Filtering (Amenities)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:8000/studios/list/?lat=0&lng=0&amenities=Big Weight,Treadmill",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"studios",
+								"list",
+								""
+							],
+							"query": [
+								{
+									"key": "lat",
+									"value": "0"
+								},
+								{
+									"key": "lng",
+									"value": "0"
+								},
+								{
+									"key": "amenities",
+									"value": "Big Weight,Treadmill"
+								}
+							]
+						},
+						"description": "Filter to show only Studios which own **any of** the given amenities."
+					},
+					"response": []
+				},
+				{
+					"name": "Studio Filtering (Class Names)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:8000/studios/list/?lat=0&lng=0&class_names=HIIT",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"studios",
+								"list",
+								""
+							],
+							"query": [
+								{
+									"key": "lat",
+									"value": "0"
+								},
+								{
+									"key": "lng",
+									"value": "0"
+								},
+								{
+									"key": "class_names",
+									"value": "HIIT"
+								}
+							]
+						},
+						"description": "Filter to show only Studios which have classes whose names are a partial match for **any** of the given parameters, which can also be separated by commas like amenities."
+					},
+					"response": []
+				},
+				{
+					"name": "Studio Information",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:8000/studios/2/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"studios",
+								"2",
+								""
+							]
+						},
+						"description": "Returns the specified studio’s basic information."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Studios – Classes",
+			"item": [
+				{
+					"name": "Studio Class Schedule",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-CSRFToken",
+								"value": "{{csrf-token}}",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "session_num",
+									"value": "2",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/studios/1/schedule",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"studios",
+								"1",
+								"schedule"
+							]
+						},
+						"description": "Returns dataset on all the classes that are to be held in this studio, including classtimes, coaches, keywords, and information on who and how many are enrolled."
+					},
+					"response": []
+				},
+				{
+					"name": "Studio Class Enroll Individual",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-CSRFToken",
+								"value": "{{csrf-token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "session_num",
+									"value": "2",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/studios/class_time/2/enroll/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"studios",
+								"class_time",
+								"2",
+								"enroll",
+								""
+							]
+						},
+						"description": "The current user enrolls in an individual session, specifies by the session_num parameter in the POST body. Make sure you have an **ACTIVE SUBSCRIPTION** before trying to do this, otherwise it will not work.\n\nThe effects of these calls are visible through the class schedule pages, or clearly through the admin panel too."
+					},
+					"response": []
+				},
+				{
+					"name": "Studio Class Enroll Recurring",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-CSRFToken",
+								"value": "{{csrf-token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "session_num",
+									"value": "2",
+									"type": "text",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/studios/class_time/3/enroll/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"studios",
+								"class_time",
+								"3",
+								"enroll",
+								""
+							]
+						},
+						"description": "The current user enrolls in all future sessions, recurring. Note the absence of the session_num parameter in the POST body.\n\nMake sure you have an **ACTIVE SUBSCRIPTION** before trying to do this, otherwise it will not work."
+					},
+					"response": []
+				},
+				{
+					"name": "See how many enrolled in a session",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-CSRFToken",
+								"value": "{{csrf-token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://127.0.0.1:8000/studios/class_time/num_enrolled/2/2/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"studios",
+								"class_time",
+								"num_enrolled",
+								"2",
+								"2",
+								""
+							]
+						},
+						"description": "User the URL parameters (first one for class_time id, second one for session_num) to see how many people are enrolled in that session of that class_time."
+					},
+					"response": []
+				},
+				{
+					"name": "Studio Class Drop Session",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-CSRFToken",
+								"value": "{{csrf-token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "session_num",
+									"value": "10",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/studios/class_time/3/drop/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"studios",
+								"class_time",
+								"3",
+								"drop",
+								""
+							]
+						},
+						"description": "Current user DROPS a specific session from their recurring enrollment, indicating that although they have committed to attending on a recurring basis, they will not be attending this specific session (specified in the POST body)."
+					},
+					"response": []
+				},
+				{
+					"name": "Studio Class Drop From Now On",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-CSRFToken",
+								"value": "{{csrf-token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "session_num",
+									"value": "10",
+									"type": "text",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/studios/class_time/3/drop/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"studios",
+								"class_time",
+								"3",
+								"drop",
+								""
+							]
+						},
+						"description": "Like enrolling individual/recurring, not including the session_num in the POST formdata makes it so you cancel your recurring subscription from this point forward.\n\nAn **end date** will be added to the recurring enrollment object."
+					},
+					"response": []
+				},
+				{
+					"name": "This user's class schedule",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-CSRFToken",
+								"value": "{{csrf-token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "session_num",
+									"value": "10",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/studios/schedule/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"studios",
+								"schedule",
+								""
+							]
+						},
+						"description": "All the class, classtime, recurring/individual enrollment and session drop information for a user!\n\nOnly returns info pertinent to that classes and enrollments that this user is involved in."
+					},
+					"response": []
+				}
+			],
+			"description": "A studio can facilitate many classes; each one one or more of its own classtimes. Each of those can be enrolled to by users in either an isolated or recurring basis."
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"// const echoPostRequest = {",
+					"//   url: 'http://127.0.0.1:8000/api/token/',",
+					"//   method: 'POST',",
+					"//   header: 'Content-Type:application/json',",
+					"//   'body': {",
+					"//         'mode': 'formdata',",
+					"//         'formdata': [",
+					"//             {'key':'username', 'value':'testUser'},",
+					"//             {'key':'password', 'value':'Test123!'}",
+					"//         ]",
+					"//     }",
+					"// };",
+					"",
+					"// var getToken = true;",
+					"",
+					"// if (!pm.collectionVariables.get('token')) {",
+					"//     console.log('Token is missing')",
+					"// } else {",
+					"//     getToken = false;",
+					"//     console.log('Token and expiry date are all good');",
+					"// }",
+					"",
+					"// if (getToken === true) {",
+					"//     console.log(\"entering\")",
+					"//     pm.sendRequest(echoPostRequest, function (err, res) {",
+					"//     console.log(err ? err : res.json());",
+					"//         if (err === null) {",
+					"//             console.log('Saving the token and expiry date')",
+					"//             var responseJson = res.json();",
+					"//             pm.collectionVariables.set('token', responseJson.access)",
+					"//             console.log(responseJson.access)",
+					"//             console.log(pm.collectionVariables.get('token'))",
+					"//         }",
+					"//     });",
+					"// }"
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "token",
+			"value": "",
+			"disabled": true
+		},
+		{
+			"key": "variable_key",
+			"value": "",
+			"type": "string",
+			"disabled": true
+		},
+		{
+			"key": "csrf-token",
+			"value": ""
+		},
+		{
+			"key": "token",
+			"value": ""
+		}
+	]
+}

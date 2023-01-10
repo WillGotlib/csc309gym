@@ -1,0 +1,16 @@
+.paymentCard {
+    background-color: whitesmoke;
+    border-color: black;
+    transition: background-color 0.5s;
+}
+
+.paymentCard:hover {
+    /* padding-left: 10em; */
+    background-color: lightsteelblue;
+    box-shadow: 1em;
+}
+
+.paymentCardEntry {
+    display: flex;
+    align-items: center;
+}

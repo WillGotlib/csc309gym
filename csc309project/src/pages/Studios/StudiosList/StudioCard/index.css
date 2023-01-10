@@ -1,0 +1,22 @@
+.studio-card {
+    border: 1px solid #ccc;
+    background-color: #f8f8f8;
+    padding: 10px;
+}
+
+.studio-card-body {
+    padding: 10px;
+}
+
+.studio-card-title {
+    font-weight: bold;
+}
+
+.studio-card-text {
+    margin-bottom: 3px;
+}
+
+.studio-card-amenities li {
+    list-style: none;
+    margin-bottom: 5px;
+}
